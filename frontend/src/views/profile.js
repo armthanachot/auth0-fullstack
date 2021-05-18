@@ -7,7 +7,6 @@ import { useAuth0 } from "@auth0/auth0-react";
 const Profile = () => {
   const { user,getAccessTokenSilently } = useAuth0();
   const { name, picture, email } = user;
-  // const domain = "dev-s3o1avy9.us.auth0.com"
   const audience = "http://localhost:6060/"
   getAccessTokenSilently({
     audience: audience

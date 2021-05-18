@@ -34,13 +34,13 @@ messagesRouter.get("/scoped-message",checkJwt,jwtAuthz(["default:admin"]), (req,
   res.status(200).send(message);
 });
 
-messagesRouter.get("/two-scoped-message",checkJwt,jwtAuthz(["default:admin","default:manager"],{
+messagesRouter.get("/two-permission-message",checkJwt,jwtAuthz(["default:admin","default:manager"],{
   customScopeKey: "permissions",
   checkAllScopes: true,
   failWithError: true
 }), (req, res) => {
-  const message = "hey this is two scoped endpoint";
-  res.status(200).send(message);
+  const message = "hey this is two permission endpoint";
+  return res.status(200).json({message});
 });
 
 messagesRouter.post("/create",checkJwt,jwtAuthz(["default:manager"],{
