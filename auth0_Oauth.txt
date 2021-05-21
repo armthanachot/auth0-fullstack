@@ -1,0 +1,45 @@
+https://dev-s3o1avy9.us.auth0.com/authorize?audience=http://localhost:4040&response_type=code&client_id=Tp3dVHDLkHO4ta8HYrapeHGoadllUYuX&redirect_uri=http://localhost:4040/profile&state=xyzABC123&prompt=none
+
+https://dev-s3o1avy9.us.auth0.com/authorize?response_type=code&client_id=Tp3dVHDLkHO4ta8HYrapeHGoadllUYuX&redirect_uri=http://localhost:4040/profile&scope=openid%20profile&state=xyzABC123&prompt=none
+
+# PKCE
+https://dev-s3o1avy9.us.auth0.com/authorize?scope=openid%20profile&response_type=code&client_id=Tp3dVHDLkHO4ta8HYrapeHGoadllUYuX&redirect_uri=http://localhost:4040/profile&code_challenge=CODE_CHALLENGE&code_challenge_method=S256
+code_challenge เป็นแบบสุ่ม string ขึ้นมา
+url ที่ยิงได้ ไม่ใส่ code_challenge , code_challenge_method
+https://dev-s3o1avy9.us.auth0.com/authorize?response_type=code&client_id=Tp3dVHDLkHO4ta8HYrapeHGoadllUYuX&redirect_uri=http://localhost:4040/profile&scope=openid%20profile&code_challenge=5UgMMFdeudB2zZGNI6G8kS0AEZl_YgM98LaZL2fX61w&code_challenge_method=S256&state=xyzABC123&prompt=none
+
+เวลายิง แล้วจะได้ 
+เช่น 
+http://localhost:4040/profile?code=OVgFwrXMduEQKMCz&state=xyzABC123
+ตรง code คือ authorization code เพื่อเอาไปใช้ต่อ ใช้ขอ refresh token
+
+ขอ request token 
+
+var axios = require("axios").default;
+
+var options = {
+  method: 'POST',
+  url: 'https://dev-s3o1avy9.us.auth0.com/oauth/token',
+  headers: {'content-type': 'application/x-www-form-urlencoded'},
+  data: {
+    grant_type: 'authorization_code', // เขียนไปแบบนี้ 
+    client_id: 'Tp3dVHDLkHO4ta8HYrapeHGoadllUYuX',
+    client_secret: 'YOUR_CLIENT_SECRET',
+    code: 'YOUR_AUTHORIZATION_CODE', // อันที่ได้มาจาก parameter code 
+    redirect_uri: 'http://localhost:4040/profile'
+  }
+};
+
+axios.request(options).then(function (response) {
+  console.log(response.data);
+}).catch(function (error) {
+  console.error(error);
+});
+
+จะได้ response 
+{
+  "access_token": "eyJz93a...k4laUWw",
+  "refresh_token": "GEbRxBN...edjnXbL",
+  "id_token": "eyJ0XAi...4faeEoQ",
+  "token_type": "Bearer"
+}
